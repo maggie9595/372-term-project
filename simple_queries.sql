@@ -10,7 +10,8 @@ INSERT INTO Cars
 VALUES ('Honda', 'Civic', 2014, 'X');
 
 
--- 3. As a rider, I want to sign up.
+-- *** 3. As a rider, I want to sign up.
+
 INSERT INTO Users
 VALUES ('jimmy.fallon@gmail.com', 'iloveponies', 'Jimmy', 'Fallon', '6104290811', 'USA');
 
@@ -18,13 +19,13 @@ INSERT INTO Riders
 VALUES ('some_user_id_value');
 
 
--- 4. As a driver, I want to set myself as available to give rides.
+-- *** 4. As a driver, I want to set myself as available to give rides.
 UPDATE Drivers
 SET is_available
 WHERE id = 'some_driver_id_value';
 
 
--- 5. As an admin, I want to view ride history on a particular day.
+-- *** 5. As an admin, I want to view ride history on a particular day.
 SELECT *
 FROM Rides
 WHERE start_datetime == 'some_datetime_value';
@@ -38,7 +39,7 @@ ON d.user_id = u.id
 WHERE (d.is_available == true) AND (u.country == 'USA');
 
 
--- 7. As a rider, I want to link my PayPal account to my Uber account.
+-- *** 7. As a rider, I want to link my PayPal account to my Uber account.
 INSERT INTO PaymentMethods
 VALUES ('Jimmy', 'Fallon', '15289');
 
