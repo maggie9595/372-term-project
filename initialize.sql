@@ -34,7 +34,4 @@
 \COPY CarOwnerships(driver_id, car_id, license_plate, car_mileage, drivers_license_num)FROM './csv_data/carownerships.csv' WITH QUOTE '"' DELIMITER ',' CSV;
 
 -- Import Rides
-\COPY Rides(rider_id, driver_id, start_latitude, start_longitude, destination, mileage, start_datetime, end_datetime) FROM './csv_data/rides.csv' WITH QUOTE '"' DELIMITER ',' CSV;
-
--- Import Transactions
-\COPY Transactions(ride_id, payment_method_id, price, datetime_paid) FROM './csv_data/transactions.csv' WITH QUOTE '"' DELIMITER ',' CSV;
+\COPY Rides(rider_id, driver_id, start_latitude, start_longitude, destination, mileage, start_datetime, end_datetime, payment_method_id, price, datetime_paid) FROM './csv_data/rides.csv' WITH QUOTE '"' DELIMITER ',' CSV;

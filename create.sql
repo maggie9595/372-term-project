@@ -107,12 +107,7 @@ CREATE TABLE Rides (
   destination     TEXT      NOT NULL,
   mileage         INT       NOT NULL,
   start_datetime  TIMESTAMP NOT NULL,
-  end_datetime    TIMESTAMP NOT NULL
-);
-
-CREATE TABLE Transactions (
-  id                SERIAL PRIMARY KEY,
-  ride_id           SERIAL REFERENCES Rides (id),
+  end_datetime    TIMESTAMP NOT NULL,
   payment_method_id SERIAL REFERENCES PaymentMethods (id),
   price             NUMERIC(10, 2) NOT NULL,
   datetime_paid     TIMESTAMP
