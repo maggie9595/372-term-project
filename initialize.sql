@@ -16,7 +16,7 @@
 \COPY PaymentMethods(billing_first_name, billing_last_name, billing_zipcode) FROM './csv_data/paymentmethods.csv' WITH QUOTE '"' DELIMITER ',' CSV;
 
 -- Import CreditCards
-\COPY CreditCards(id, payment_method_id, card_number, expiration_month, expiration_year, cvv_code) FROM './csv_data/creditcards.csv' WITH QUOTE '"' DELIMITER ',' CSV;
+\COPY CreditCards(payment_method_id, card_number, expiration_month, expiration_year, cvv_code) FROM './csv_data/creditcards.csv' WITH QUOTE '"' DELIMITER ',' CSV;
 
 -- Import PayPals
 \COPY PayPals(payment_method_id, paypal_email, paypal_password) FROM './csv_data/paypals.csv' WITH QUOTE '"' DELIMITER ',' CSV;
