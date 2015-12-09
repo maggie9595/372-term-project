@@ -1,4 +1,5 @@
 -- CSV Files located in the csv_data folder in the same directory as this script.
+\c j9_uber;
 
 -- Import Users
 \COPY Users(email, password, first_name, last_name, phone_number, country) FROM './csv_data/users.csv' WITH QUOTE '"' DELIMITER ',' CSV;
