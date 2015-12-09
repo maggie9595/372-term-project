@@ -1,4 +1,4 @@
-DROP DATABASE IF EXISTS uber;
+DROP DATABASE IF EXISTS j9_uber;
 CREATE DATABASE j9_uber;
 \c j9_uber;
 
