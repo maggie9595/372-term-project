@@ -1,7 +1,7 @@
 -- CSV Files located in the csv_data folder in the same directory as this script.
 
 -- Import Users
-\COPY Users(email, "password", first_name, last_name, phone_number, country) FROM './csv_data/users.csv' WITH QUOTE '"' DELIMITER ',' CSV;
+\COPY Users(email, password, first_name, last_name, phone_number, country) FROM './csv_data/users.csv' WITH QUOTE '"' DELIMITER ',' CSV;
 
 -- Import Riders
 \COPY Riders(user_id) FROM './csv_data/riders.csv' WITH QUOTE '"' DELIMITER ',' CSV;
