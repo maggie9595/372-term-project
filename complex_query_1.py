@@ -28,23 +28,41 @@ def validate_card(card_id):
     card_number = rows[0][0]
 
     # Validate the credit card number
+    # Luhn algorithm for mod-10 checksum credit card validation
+    sum = 0
+    num_digits = len(card_number)
+    oddeven = num_digits & 1
+
+    for count in range(0, num_digits):
+        digit = int(card_number[count])
+
+        if not ((count & 1) ^ oddeven ):
+            digit = digit * 2
+        if digit > 9:
+            digit = digit - 9
+
+        sum = sum + digit
+
+    is_valid = ((sum % 10) == 0)
 
     # Save the validation result to the database.
-    # _do_query_no_results("""
-    #   UPDATE Rides
-    #   SET mileage=%s,
-    #       duration=%s,
-    #       end_datetime=%s,
-    #       payment_method_id=%s,
-    #       price=%s,
-    #       datetime_paid=%s
-    #   WHERE Rides.id=%s
-    # """, mileage, duration, end_datetime, rider_payment_method, total_price, end_datetime, ride_id)
+    _do_query_no_results("""
+      UPDATE CreditCards
+      SET is_validated=%s
+      WHERE CreditCards.id=%s
+    """, is_valid, card_id)
 
+    if is_valid:
+    	print("Your credit card number is valid.")
+    else: 
+    	print("Your credit card number is invalid.")
+
+    print("This has been updated in the database.")
 
 def run_example_queries():
     validate_card(1)
-
+    validate_card(2)
+    validate_card(3)
 
 # ============== Helper functions ================
 
@@ -96,4 +114,8 @@ if __name__ == '__main__':
         cur = conn.cursor() # Global cursor variable available everywhere.
         run_example_queries()
     except psycopg2.Error as e:
+<<<<<<< HEAD
         print("Unable to open connection: %s" % (e))
+=======
+        print("Unable to open connection: %s" % (e))
+>>>>>>> e39f570eaaf0b37bd56d2ed1f69b378ef366f506
