@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-# 8. As a rider, I want to be able to request and get on a ride
-
-
-=======
 # Complex Query 3:
 # As a rider, I want Uber to validate and verify my credit card
 # So that I can use it to pay for future rides
