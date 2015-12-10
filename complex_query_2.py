@@ -16,7 +16,7 @@ PRINT_DEBUG = True
 # ========= Complex query functions below ============
 
 def calculateDistance(rider_lat, rider_long, driver_lat, driver_long):
-    distance = sqrt( ((driver_lat - rider_lat)**2) + ((driver_long - rider_long)**2))
+    distance = math.sqrt( ((driver_lat - rider_lat)**2) + ((driver_long - rider_long)**2))
     return distance
 
 
@@ -45,7 +45,7 @@ def request_ride(rider_id):
         WHERE is_available = true
     """
     rows = _do_query(driversQuery)
-    for row in rows
+    for row in rows:
         driverid, is_available, driver_longitude, driver_latitude = row
         distance = calculateDistance(rider_latitude, rider_longitude, driver_latitude, driver_longitude)
         if (distance < closestDistance):
@@ -59,7 +59,7 @@ def request_ride(rider_id):
     """
     print(insertQuery)
 
-    _do_query_no_results(insertsQuery, rider_id, closestDriver, rider_longitude, rider_latitude) 
+    _do_query_no_results(insertQuery, rider_id, closestDriver, rider_longitude, rider_latitude, datetime.today()) 
 
 
 
