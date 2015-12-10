@@ -54,10 +54,12 @@ def request_ride(rider_id):
 
     # Insert into rides: rider_id, driver_id, start_longitude, start_latitude, start_datetime
     insertQuery = """
-        INSERT INTO Rides
+        INSERT INTO Rides (rider_id, driver_id, start_longitude, start_latitude, start_datetime)
         VALUES(%s, %s, %s, %s, %s)
     """
     print(insertQuery)
+
+    print ("riderlatitude = %s", rider_latitude)
 
     _do_query_no_results(insertQuery, rider_id, closestDriver, rider_longitude, rider_latitude, datetime.today()) 
 
