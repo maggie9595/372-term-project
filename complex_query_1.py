@@ -28,6 +28,25 @@ def validate_card(card_id):
     card_number = rows[0][0]
 
     # Validate the credit card number
+    # Luhn algorithm for mod-10 checksum credit card validation
+    sum = 0
+    num_digits = len(card_number)
+    oddeven = num_digits & 1
+
+    print(card_number)
+    for count in range(0, num_digits):
+        digit = int(card_number[count])
+
+        if not ((count & 1) ^ oddeven ):
+            digit = digit * 2
+        if digit > 9:
+            digit = digit - 9
+
+        sum = sum + digit
+
+    is_valid = ((sum % 10) == 0)
+
+    print(is_valid)
 
     # Save the validation result to the database.
     # _do_query_no_results("""
