@@ -97,3 +97,4 @@ if __name__ == '__main__':
         run_example_queries()
     except psycopg2.Error as e:
         print("Unable to open connection: %s" % (e))
+>>>>>>> 5229f3076dcdbe2684c6d124874a60a25db615ad
