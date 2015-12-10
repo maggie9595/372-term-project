@@ -1,4 +1,4 @@
-# Complex Query 3:
+# Complex Query 1:
 # As a rider, I want Uber to validate and verify my credit card
 # So that I can use it to pay for future rides
 # 67-372 F15 Team J9
@@ -88,7 +88,6 @@ def _do_query_no_results(tmpl, *params):
     if(PRINT_DEBUG):
         print(cmd.decode('utf-8'))
     cur.execute(cmd)
-
 
 # ========= Main method that runs the program ===========
 
