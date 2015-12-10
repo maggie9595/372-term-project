@@ -33,7 +33,6 @@ def validate_card(card_id):
     num_digits = len(card_number)
     oddeven = num_digits & 1
 
-    print(card_number)
     for count in range(0, num_digits):
         digit = int(card_number[count])
 
@@ -46,24 +45,24 @@ def validate_card(card_id):
 
     is_valid = ((sum % 10) == 0)
 
-    print(is_valid)
-
     # Save the validation result to the database.
-    # _do_query_no_results("""
-    #   UPDATE Rides
-    #   SET mileage=%s,
-    #       duration=%s,
-    #       end_datetime=%s,
-    #       payment_method_id=%s,
-    #       price=%s,
-    #       datetime_paid=%s
-    #   WHERE Rides.id=%s
-    # """, mileage, duration, end_datetime, rider_payment_method, total_price, end_datetime, ride_id)
+    _do_query_no_results("""
+      UPDATE CreditCards
+      SET is_validated=%s
+      WHERE CreditCards.id=%s
+    """, is_valid, card_id)
 
+    if is_valid:
+    	print("Your credit card number is valid.")
+    else: 
+    	print("Your credit card number is invalid.")
+
+    print("This has been updated in the database.")
 
 def run_example_queries():
     validate_card(1)
-
+    validate_card(2)
+    validate_card(3)
 
 # ============== Helper functions ================
 
@@ -116,4 +115,3 @@ if __name__ == '__main__':
         run_example_queries()
     except psycopg2.Error as e:
         print("Unable to open connection: %s" % (e))
->>>>>>> 5229f3076dcdbe2684c6d124874a60a25db615ad
