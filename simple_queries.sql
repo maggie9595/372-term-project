@@ -3,11 +3,14 @@
 --- SIMPLE QUERIES ---
 
 -- 1. As a driver, I want to sign up with my car.
-INSERT INTO Drivers
-VALUES (16, true, 79.9764, 40.4397);
+INSERT INTO Users (email, password, first_name, last_name, phone_number, country)
+VALUES ('maggie@gmail.com', 'password', 'Maggie', 'Yu', '717-000-0000', 'US');
 
-INSERT INTO CarOwnerships
-VALUES ((SELECT LAST(id) FROM Drivers), 3, "14D AA8", 26042, "A1032-1243-5783");
+INSERT INTO Drivers (user_id, is_available, current_latitude, current_longitude)
+VALUES ((SELECT MAX(id) FROM Users), true, 79.9764, 40.4397);
+
+INSERT INTO CarOwnerships (driver_id, car_id, license_plate, car_mileage, drivers_license_num)
+VALUES ((SELECT MAX(id) FROM Drivers), 3, '14D AA8', 26042, 'A1032-1243-5783');
 
 
 -- 2. As an admin, I want to add a new type of car listing into Uber.
@@ -18,7 +21,7 @@ VALUES ('Honda', 'Civic', 2014, 'X');
 -- *** 3. As a rider, I want to sign up.
 
 INSERT INTO Users
-VALUES ('jimmyfallon@gmail.com', 'iloveponies', 'Jimmy', 'Fallon', '6104290811', 'USA');
+VALUES ('jimmyfallon@gmail.com', 'iloveponies', 'Jimmy', 'Fallon', '610-429-0811', 'US');
 
 INSERT INTO Riders
 VALUES ((SELECT LAST(id) FROM Riders), 179.9764, 140.4397);
@@ -53,6 +56,3 @@ VALUES ((SELECT LAST(id) FROM Users), (SELECT LAST(id) FROM PaymentMethods), 'Ji
 
 INSERT INTO PayPals
 VALUES ((SELECT LAST(id) FROM PaymentMethods), 'jimmyfallon@gmail.com', 'iloveponies');
-
-
-
