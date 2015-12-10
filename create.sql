@@ -1,3 +1,7 @@
+DROP DATABASE IF EXISTS j9_uber;
+CREATE DATABASE j9_uber;
+\c j9_uber;
+
 -- Drop dependent tables first
 DROP TABLE IF EXISTS UserPaymentMethods;
 DROP TABLE IF EXISTS CarOwnerships;
@@ -99,15 +103,15 @@ CREATE TABLE CarOwnerships (
 );
 
 CREATE TABLE Rides (
-  id              SERIAL PRIMARY KEY,
-  rider_id        SERIAL REFERENCES Riders (id),
-  driver_id       SERIAL REFERENCES Drivers (id),
-  start_latitude  FLOAT     NOT NULL,
-  start_longitude FLOAT     NOT NULL,
-  destination     TEXT      NOT NULL,
-  mileage         INT       NOT NULL,
-  start_datetime  TIMESTAMP NOT NULL,
-  end_datetime    TIMESTAMP NOT NULL,
+  id                SERIAL PRIMARY KEY,
+  rider_id          SERIAL REFERENCES Riders (id),
+  driver_id         SERIAL REFERENCES Drivers (id),
+  start_latitude    FLOAT          NOT NULL,
+  start_longitude   FLOAT          NOT NULL,
+  destination       TEXT           NOT NULL,
+  mileage           INT            NOT NULL,
+  start_datetime    TIMESTAMP      NOT NULL,
+  end_datetime      TIMESTAMP      NOT NULL,
   payment_method_id SERIAL REFERENCES PaymentMethods (id),
   price             NUMERIC(10, 2) NOT NULL,
   datetime_paid     TIMESTAMP

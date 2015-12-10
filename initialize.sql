@@ -1,4 +1,5 @@
 -- CSV Files located in the csv_data folder in the same directory as this script.
+\c j9_uber;
 
 -- Import Users
 \COPY Users(email, password, first_name, last_name, phone_number, country) FROM './csv_data/users.csv' WITH QUOTE '"' DELIMITER ',' CSV;
@@ -28,7 +29,7 @@
 \COPY UserPaymentMethods(user_id, payment_method_id, payment_method_nickname, date_added) FROM './csv_data/userpaymentmethods.csv' WITH QUOTE '"' DELIMITER ',' CSV;
 
 -- Import Cars
-\COPY Cars(manufacturer, model, "year", ride_type) FROM './csv_data/cars.csv' WITH QUOTE '"' DELIMITER ',' CSV;
+\COPY Cars(manufacturer, model, year, ride_type) FROM './csv_data/cars.csv' WITH QUOTE '"' DELIMITER ',' CSV;
 
 -- Import CarOwnwerships
 \COPY CarOwnerships(driver_id, car_id, license_plate, car_mileage, drivers_license_num)FROM './csv_data/carownerships.csv' WITH QUOTE '"' DELIMITER ',' CSV;
