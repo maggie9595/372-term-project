@@ -113,8 +113,4 @@ if __name__ == '__main__':
         cur = conn.cursor() # Global cursor variable available everywhere.
         run_example_queries()
     except psycopg2.Error as e:
-<<<<<<< HEAD
         print("Unable to open connection: %s" % (e))
-=======
-        print("Unable to open connection: %s" % (e))
->>>>>>> e39f570eaaf0b37bd56d2ed1f69b378ef366f506

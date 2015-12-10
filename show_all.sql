@@ -1,3 +1,5 @@
+\c j9_uber
+
 \echo -- Showing all users
 SELECT *
 FROM Users;
