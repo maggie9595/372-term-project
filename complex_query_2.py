@@ -20,7 +20,7 @@ def calculateDistance(rider_lat, rider_long, driver_lat, driver_long):
     return distance
 
 
-def request_ride(rider_id):
+def request_ride(rider_id, start_datetime):
     """
     Rider requests a ride, system matches them with closest driver, stores ride information in the Rides table
 
@@ -37,7 +37,7 @@ def request_ride(rider_id):
     rider_longitude, rider_latitude = rows[0]
 
     # Find the closest driver
-    closestDriver = 0
+    closestDriver = 1
     closestDistance = 0.0;
     driversQuery = """
         SELECT id, is_available, current_longitude, current_latitude
@@ -47,28 +47,26 @@ def request_ride(rider_id):
     rows = _do_query(driversQuery)
     for row in rows:
         driverid, is_available, driver_longitude, driver_latitude = row
+        if driverid == 1:
+            closestDistance = calculateDistance(rider_latitude, rider_longitude, driver_latitude, driver_longitude)
         distance = calculateDistance(rider_latitude, rider_longitude, driver_latitude, driver_longitude)
         if (distance < closestDistance):
             closestDistance = distance
             closestDriver = driverid
 
+    print("The closest driver to the rider is", closestDriver)
     # Insert into rides: rider_id, driver_id, start_longitude, start_latitude, start_datetime
     insertQuery = """
         INSERT INTO Rides (rider_id, driver_id, start_longitude, start_latitude, start_datetime)
         VALUES(%s, %s, %s, %s, %s)
     """
-    print(insertQuery)
 
-    print ("riderlatitude = %s", rider_latitude)
-
-    _do_query_no_results(insertQuery, rider_id, closestDriver, rider_longitude, rider_latitude, datetime.today()) 
-
-
+    _do_query_no_results(insertQuery, rider_id, closestDriver, rider_longitude, rider_latitude, start_datetime) 
 
 
 def run_example_queries():
     # TODO Create more example queries
-    request_ride(2)
+    request_ride(2, datetime.today())
 
 
 # ============== Helper functions ================
