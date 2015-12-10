@@ -16,19 +16,19 @@ INSERT INTO Users
 VALUES ('jimmy.fallon@gmail.com', 'iloveponies', 'Jimmy', 'Fallon', '6104290811', 'USA');
 
 INSERT INTO Riders
-VALUES ('some_user_id_value');
+VALUES (179.9764, 140.4397);
 
 
 -- *** 4. As a driver, I want to set myself as available to give rides.
 UPDATE Drivers
-SET is_available
-WHERE id = 'some_driver_id_value';
+SET is_available = true
+WHERE id = "6";
 
 
 -- *** 5. As an admin, I want to view ride history on a particular day.
 SELECT *
 FROM Rides
-WHERE start_datetime == 'some_datetime_value';
+WHERE start_datetime == Date.today();
 
 
 -- 6. As an admin, I want to view the list of all available drivers in the U.S.
@@ -44,7 +44,7 @@ INSERT INTO PaymentMethods
 VALUES ('Jimmy', 'Fallon', '15289');
 
 INSERT INTO UserPaymentMethods
-VALUES (6, 6, 'Jimmys PayPal', 'date_added_value');
+VALUES (6, 6, 'Jimmys PayPal', );
 
 INSERT INTO PayPals
 VALUES (6, 'jimmy.fallon@gmail.com', 'iloveponies');

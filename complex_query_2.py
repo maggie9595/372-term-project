@@ -1,75 +1,125 @@
-# 9. As a rider, I want to get the driver that is nearest to my location
+# Complex Query 2:
+# As a user I want to request the driver that is nearest to my location
+# And I would like this ride history to be stored for future reference
+# 67-372 F15 Team J9
 
-#-----------------------------------------------------------------
-# Working with psycopg2
-#-----------------------------------------------------------------
-
-import psycopg2
 import sys
+import time
+from datetime import datetime
+import psycopg2
+import math
 
-SHOW_CMD = True
-def print_cmd(cmd):
-    if SHOW_CMD:
-        print(cmd.decode('utf-8'))
+# ============== Global variables =================
 
-def print_rows(rows):
-    for row in rows:
-        print(row)
+PRINT_DEBUG = True
 
-def get_nearest_driver():
-    targetRider = "2"
-    # get the targetRider's current latitude and longitude and store them in variables
-    # Need to set these after getting the data
-    riderLatitude = 0
-    riderLongitude = 0
-	riderQuery = '''
-        SELECT id, current_latitude, current_longitude
+# ========= Complex query functions below ============
+
+def calculateDistance(rider_lat, rider_long, driver_lat, driver_long):
+    distance = sqrt( ((driver_lat - rider_lat)**2) + ((driver_long - rider_long)**2))
+    return distance
+
+
+def request_ride(rider_id):
+    """
+    Rider requests a ride, system matches them with closest driver, stores ride information in the Rides table
+
+    :param ride_id: The id of the rider that has requested a ride. Should already be in the database.
+    """
+
+    # Get the rider's current latitude and longitude
+    riderQuery = """
+        SELECT current_longitude, current_latitude
         FROM Riders
         WHERE id = %s
-	'''
-	cmd = cur.mogrify(riderQuery, (targetRider,))
-    print("RiderQuery SQL Statement: ")
-    print_cmd(cmd)
-    cur.execute(cmd)
-    rows = cur.fetchall()
-    print("Results: \n")
-    print_rows(rows)
-    for row in rows:
-        id, current_latitude
+    """
+    rows = _do_query(riderQuery, rider_id)
+    rider_longitude, rider_latitude = rows[0]
 
-
-    # get array of drivers
-    closestDriver = "6"
-    closestDistance = 0
-    driverQuery = '''
-        SELECT *
+    # Find the closest driver
+    closestDriver = 0
+    closestDistance = 0.0;
+    driversQuery = """
+        SELECT id, is_available, current_longitude, current_latitude
         FROM Drivers
-        WHERE is_availabe = True
-    '''
-    print()
+        WHERE is_available = true
+    """
+    rows = _do_query(driversQuery)
+    for row in rows
+        driverid, is_available, driver_longitude, driver_latitude = row
+        distance = calculateDistance(rider_latitude, rider_longitude, driver_latitude, driver_longitude)
+        if (distance < closestDistance):
+            closestDistance = distance
+            closestDriver = driverid
+
+    # Insert into rides: rider_id, driver_id, start_longitude, start_latitude, start_datetime
+    insertQuery = """
+        INSERT INTO Rides
+        VALUES(%s, %s, %s, %s, %s)
+    """
+    print(insertQuery)
+
+    _do_query_no_results(insertsQuery, rider_id, closestDriver, rider_longitude, rider_latitude) 
 
 
-    print("SQL Statement: ")
-    print(tmpl)
-    cur.execute(tmpl)
-    rows = cur.fetchall()
-    print("Results: \n")
-    print_rows(rows)
-    print()
-    for row in rows:
-        uid, first, last, email = row
-        print("%s. %s, %s (%s)" % (uid, first, last, email))
 
 
+def run_example_queries():
+    # TODO Create more example queries
+    request_ride(2)
 
-# iterate over the drivers and find the closest one with the distance formula
-# insert into rides table
-  rider_id        SERIAL REFERENCES Riders (id),
-  driver_id       SERIAL REFERENCES Drivers (id),
-  start_latitude  FLOAT     NOT NULL,
-  start_longitude FLOAT     NOT NULL,
-  destination     TEXT      NOT NULL,
-  start_datetime  TIMESTAMP NOT NULL,
+
+# ============== Helper functions ================
+
+def _do_query(tmpl, *params):
+    """
+    Helper method to perform a query.
+
+    :param tmpl: The SQL template.
+    :param params: The parameters to fill the template with.
+    :return: The rows returned by the query.
+    """
+    cmd = cur.mogrify(tmpl, params)
+    if(PRINT_DEBUG):
+        print(cmd.decode('utf-8'))
+    cur.execute(cmd)
+    return cur.fetchall()
+
+def _do_query_no_results(tmpl, *params):
+    """
+    Like _do_query except it doesn't return rows. Useful for updates or inserts.
+    """
+    cmd = cur.mogrify(tmpl, params)
+    if(PRINT_DEBUG):
+        print(cmd.decode('utf-8'))
+    cur.execute(cmd)
+
+
+# ========= Main method that runs the program ===========
+
+if __name__ == '__main__':
+    try:
+        # Default database and user
+        db, user = 'j9_uber', 'postgres'
+
+        # Expected Usage: python create_query_3.py postgres
+        if len(sys.argv) >= 2:
+            user = sys.argv[1] # Get the specified user if it exists
+        else:
+            print("Using default user 'postgres' since it was not specified.")
+
+        # Connect to the db with an optional password
+        if len(sys.argv) >= 3:
+            password = sys.argv[2]
+            conn = psycopg2.connect(database=db, user=user, password=password, host="127.0.0.1", port="5432")
+        else:
+            conn = psycopg2.connect(database=db, user=user, host="127.0.0.1", port="5432")
+
+        conn.autocommit = True
+        cur = conn.cursor() # Global cursor variable available everywhere.
+        run_example_queries()
+    except psycopg2.Error as e:
+        print("Unable to open connection: %s" % (e))
 
 
 
