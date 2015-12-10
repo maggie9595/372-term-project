@@ -5,7 +5,6 @@ CREATE DATABASE j9_uber;
 -- Drop dependent tables first
 DROP TABLE IF EXISTS UserPaymentMethods;
 DROP TABLE IF EXISTS CarOwnerships;
-DROP TABLE IF EXISTS Transactions;
 DROP TABLE IF EXISTS Rides;
 DROP TABLE IF EXISTS Cars;
 DROP TABLE IF EXISTS Riders;
@@ -29,16 +28,18 @@ CREATE TABLE Users (
 );
 
 CREATE TABLE Riders (
-  id      SERIAL PRIMARY KEY,
-  user_id SERIAL REFERENCES Users (id)
+  id                SERIAL PRIMARY KEY,
+  user_id           SERIAL REFERENCES Users (id),
+  current_latitude  FLOAT NOT NULL,
+  current_longitude FLOAT NOT NULL
 );
 
 CREATE TABLE Drivers (
   id                SERIAL PRIMARY KEY,
   user_id           SERIAL REFERENCES Users (id),
+  is_available      BOOLEAN NOT NULL DEFAULT FALSE,
   current_latitude  FLOAT,
-  current_longitude FLOAT,
-  is_available      BOOLEAN NOT NULL DEFAULT FALSE
+  current_longitude FLOAT
 );
 
 CREATE TABLE Administrators (
@@ -60,7 +61,8 @@ CREATE TABLE CreditCards (
   card_number       TEXT NOT NULL,
   expiration_month  INT  NOT NULL,
   expiration_year   INT  NOT NULL,
-  cvv_code          TEXT NOT NULL
+  cvv_code          INT NOT NULL,
+  is_validated      BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE PayPals (
@@ -108,11 +110,12 @@ CREATE TABLE Rides (
   driver_id         SERIAL REFERENCES Drivers (id),
   start_latitude    FLOAT          NOT NULL,
   start_longitude   FLOAT          NOT NULL,
-  destination       TEXT           NOT NULL,
-  mileage           INT            NOT NULL,
+  end_latitude      FLOAT          NOT NULL,
+  end_longitude     FLOAT          NOT NULL,
+  mileage           FLOAT          NOT NULL,
   start_datetime    TIMESTAMP      NOT NULL,
   end_datetime      TIMESTAMP      NOT NULL,
   payment_method_id SERIAL REFERENCES PaymentMethods (id),
-  price             NUMERIC(10, 2) NOT NULL,
+  price             NUMERIC(10, 2),
   datetime_paid     TIMESTAMP
 );
