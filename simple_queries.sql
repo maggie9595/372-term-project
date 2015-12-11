@@ -14,47 +14,47 @@ VALUES ((SELECT MAX(id) FROM Drivers), 3, '14D AA8', 26042, 'A1032-1243-5783');
 
 
 -- 2. As an admin, I want to add a new type of car listing into Uber.
-INSERT INTO Cars
+INSERT INTO Cars (manufacturer, model, year, ride_type)
 VALUES ('Honda', 'Civic', 2014, 'X');
 
 
 -- *** 3. As a rider, I want to sign up.
 
-INSERT INTO Users
+INSERT INTO Users (email, password, first_name, last_name, phone_number, country)
 VALUES ('jimmyfallon@gmail.com', 'iloveponies', 'Jimmy', 'Fallon', '610-429-0811', 'US');
 
-INSERT INTO Riders
+INSERT INTO Riders (user_id, current_latitude, current_longitude)
 VALUES ((SELECT MAX(id) FROM Riders), 179.9764, 140.4397);
 
 
 -- *** 4. As a driver, I want to set myself as available to give rides.
-UPDATE Drivers
+UPDATE Drivers 
 SET is_available = true
-WHERE id = "2";
+WHERE id = 2;
 
 
 -- *** 5. As an admin, I want to view ride history on a particular day.
 SELECT *
 FROM Rides
-WHERE start_datetime = Date.today();
+WHERE start_datetime BETWEEN '2015-02-04 00:00:00' AND '2015-02-04 23:59:59';
 
-
+-- to_timestamp(:timestamp_as_string,'MM/DD/YYYY HH24:MI:SS.FF3')
 -- 6. As an admin, I want to view the list of all available drivers in the U.S.
 SELECT *
 FROM Drivers as d
 INNER JOIN Users as u
 ON d.user_id = u.id
-WHERE (d.is_available == true) AND (u.country == 'USA');
+WHERE (d.is_available = true) AND (u.country = 'US');
 
 
 -- *** 7. As a rider, I want to link my PayPal account to my Uber account.
-INSERT INTO PaymentMethods
+INSERT INTO PaymentMethods (billing_first_name, billing_last_name, billing_zipcode)
 VALUES ('Jimmy', 'Fallon', '15289');
 
-INSERT INTO UserPaymentMethods
-VALUES ((SELECT MAX(id) FROM Users), (SELECT LAST(id) FROM PaymentMethods), 'Jimmys PayPal', Date.today() );
+INSERT INTO UserPaymentMethods (user_id, payment_method_id, payment_method_nickname, date_added)
+VALUES ((SELECT MAX(id) FROM Users), (SELECT MAX(id) FROM PaymentMethods), 'Jimmys PayPal', CURRENT_TIMESTAMP );
 
-INSERT INTO PayPals
+INSERT INTO PayPals (payment_method_id, paypal_email, paypal_password)
 VALUES ((SELECT Max(id) FROM PaymentMethods), 'jimmyfallon@gmail.com', 'iloveponies');
 
 
