@@ -47,3 +47,4 @@ FROM CarOwnerships;
 \echo -- Showing all rides
 SELECT *
 FROM Rides;
+\echo -- NOTE: Some rides may contain null values until complex_query_3 is run (which completes those rides).
