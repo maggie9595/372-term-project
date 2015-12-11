@@ -24,7 +24,7 @@ INSERT INTO Users
 VALUES ('jimmyfallon@gmail.com', 'iloveponies', 'Jimmy', 'Fallon', '610-429-0811', 'US');
 
 INSERT INTO Riders
-VALUES ((SELECT LAST(id) FROM Riders), 179.9764, 140.4397);
+VALUES ((SELECT MAX(id) FROM Riders), 179.9764, 140.4397);
 
 
 -- *** 4. As a driver, I want to set myself as available to give rides.
@@ -52,7 +52,12 @@ INSERT INTO PaymentMethods
 VALUES ('Jimmy', 'Fallon', '15289');
 
 INSERT INTO UserPaymentMethods
-VALUES ((SELECT LAST(id) FROM Users), (SELECT LAST(id) FROM PaymentMethods), 'Jimmys PayPal', Date.today() );
+VALUES ((SELECT MAX(id) FROM Users), (SELECT LAST(id) FROM PaymentMethods), 'Jimmys PayPal', Date.today() );
 
 INSERT INTO PayPals
-VALUES ((SELECT LAST(id) FROM PaymentMethods), 'jimmyfallon@gmail.com', 'iloveponies');
+VALUES ((SELECT Max(id) FROM PaymentMethods), 'jimmyfallon@gmail.com', 'iloveponies');
+
+
+
+
+
