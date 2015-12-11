@@ -65,8 +65,9 @@ def request_ride(rider_id, start_datetime):
 
 
 def run_example_queries():
-    # TODO Create more example queries
+    request_ride(1, datetime.today())
     request_ride(2, datetime.today())
+    request_ride(3, datetime.today())
 
 
 # ============== Helper functions ================
@@ -120,7 +121,3 @@ if __name__ == '__main__':
         run_example_queries()
     except psycopg2.Error as e:
         print("Unable to open connection: %s" % (e))
-
-
-
-    
