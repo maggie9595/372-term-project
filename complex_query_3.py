@@ -1,6 +1,5 @@
 # Complex Query 3:
-# As a user I want to finish my ride and pay AND
-# As a driver, I want to charge more for a ride if I drive a bigger or more luxurious car
+# As a driver I want to complete a ride and charge the right price for it
 # 67-372 F15 Team J9
 
 import sys
@@ -12,34 +11,40 @@ import psycopg2
 
 PRINT_DEBUG = True
 
-# TODO Change the rates to be realistic
 RIDE_TYPE_PRICING = {
-    "x": {"base_fare": 1, "per_minute": 1, "per_mile": 1},
-    "xl": {"base_fare": 1, "per_minute": 1, "per_mile": 1},
-    "select": {"base_fare": 1, "per_minute": 1, "per_mile": 1},
-    "black": {"base_fare": 1, "per_minute": 1, "per_mile": 1}
+    "x": {"base_fare": 3, "per_minute": 0.4, "per_mile": 2.15},
+    "xl": {"base_fare": 4.5, "per_minute": 0.6, "per_mile": 3.25},
+    "select": {"base_fare": 5, "per_minute": 0.5, "per_mile": 3},
+    "black": {"base_fare": 7, "per_minute": 0.65, "per_mile": 3.75}
 }
 
 
 # ========= Complex query functions below ============
 
-def complete_ride(ride_id, mileage=None, duration=None):
+def complete_ride(ride_id, mileage, end_latitude, end_longitude):
     """
-    Completes a ride by saving the ride's duration, mileage, and transaction information.
+    Completes a ride by saving the ride's mileage and transaction information.
 
     :param ride_id: The id of the ride to complete. Should already be in the database.
-    :param mileage: The length of the ride, in miles.
-    :param duration: The duration of the ride, in minutes.
+    :param mileage: The length of the ride, in miles (optional if already in the database).
     """
 
-    # Get the mileage and duration from the database if not specified.
-    if mileage == None or duration == None:
-        rows = _do_query("""
-          SELECT mileage, duration
-          FROM Rides
-          WHERE id = %s;
-        """, ride_id)
-        mileage, duration = rows[0]
+    # Get the start and end date times
+    rows = _do_query("""
+        SELECT start_datetime, end_datetime
+        FROM Rides
+        WHERE id=%s
+    """, ride_id)
+    start_datetime, end_datetime = rows[0]
+
+    # Use current time if end_time doesn't exist
+    if(end_datetime == None):
+        end_datetime = datetime.fromtimestamp(time.time())
+
+    # Calculate the duration of the ride
+    sdt_seconds = time.mktime(start_datetime.timetuple())
+    edt_seconds = time.mktime(end_datetime.timetuple())
+    duration = (edt_seconds - sdt_seconds) / 60 # In minutes
 
     # Get the driver's car type
     rows = _do_query("""
@@ -72,22 +77,26 @@ def complete_ride(ride_id, mileage=None, duration=None):
     rider_payment_method = rows[0][0]
 
     # Save the transaction at this time.
-    end_datetime = datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
     _do_query_no_results("""
       UPDATE Rides
-      SET mileage=%s,
-          duration=%s,
+      SET end_latitude=%s,
+          end_longitude=%s,
+          mileage=%s,
           end_datetime=%s,
           payment_method_id=%s,
           price=%s,
           datetime_paid=%s
       WHERE Rides.id=%s
-    """, mileage, duration, end_datetime, rider_payment_method, total_price, end_datetime, ride_id)
+    """, end_latitude, end_longitude, mileage, end_datetime,
+         rider_payment_method, total_price, end_datetime, ride_id)
+
+    print("Ride #%s has been completed and paid for, the price is: $%s." % (ride_id, total_price))
 
 
 def run_example_queries():
-    # TODO Create more example queries
-    complete_ride(2, 2, 3)
+    complete_ride(3, 8, 40.438959,-79.930746)
+    complete_ride(4, 4, 40.443241,-79.923416)
+    complete_ride(5, 3, 40.453195,-79.931458)
 
 
 # ============== Helper functions ================

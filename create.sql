@@ -115,7 +115,7 @@ CREATE TABLE Rides (
   mileage           FLOAT,
   start_datetime    TIMESTAMP      NOT NULL,
   end_datetime      TIMESTAMP,
-  payment_method_id SERIAL REFERENCES PaymentMethods (id),
+  payment_method_id INTEGER REFERENCES PaymentMethods (id),
   price             NUMERIC(10, 2),
   datetime_paid     TIMESTAMP
 );
